@@ -129,7 +129,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+    env_file:
+      - .env
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
@@ -144,7 +145,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+    env_file:
+      - .env
   airflow-worker:
     <<: *airflow-common
     command: celery worker
@@ -167,6 +169,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    env_file:
+      - .env
 
   airflow-triggerer:
     <<: *airflow-common
