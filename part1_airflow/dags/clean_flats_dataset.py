@@ -14,7 +14,8 @@ def remove_missing_values(data):
 
 def remove_outliers(data):
     potential_outliers = pd.DataFrame()
-    num_cols = data.select_dtypes(['float']).columns
+    num_cols = data.select_dtypes(['float']).columns.tolist()
+    num_cols.append("price")
     threshold = 3
     for col in num_cols:
         Q1 = data[col].quantile(0.25)
@@ -34,6 +35,7 @@ def remove_outliers(data):
     start_date=pendulum.datetime(2023, 1, 1, tz='UTC'),
     catchup=False,
     tags=['ETL'],
+    max_active_runs=1,
     on_success_callback=send_telegram_success_message,
     on_failure_callback=send_telegram_failure_message
 )
@@ -72,7 +74,6 @@ def clean_flats_price_dataset():
             Column("flats_count", Integer),
             Column("floors_total", Integer),
             Column("has_elevator", Boolean),
-            Column("target", BigInteger),
             UniqueConstraint("id", name = "unique_clean_id_constraint")
         )
         if not inspect(db_conn).has_table(flats_price.name):

@@ -8,6 +8,7 @@ import pendulum
     start_date=pendulum.datetime(2023, 1, 1, tz='UTC'),
     catchup=False,
     tags=['ETL'],
+    max_active_runs=1,
     on_success_callback=send_telegram_success_message,
     on_failure_callback=send_telegram_failure_message
 )
@@ -47,7 +48,6 @@ def prepare_flats_price_dataset():
             Column("flats_count", Integer),
             Column("floors_total", Integer),
             Column("has_elevator", Boolean),
-            Column("target", BigInteger),
             UniqueConstraint("id", name = "unique_id_constraint")
         )
         if not inspect(db_conn).has_table(flats_price.name):
@@ -76,8 +76,7 @@ def prepare_flats_price_dataset():
     
     @task()
     def transform(data: pd.DataFrame) -> pd.DataFrame:
-        data['target'] = data['price']
-        return data
+        return data.copy()
     
     @task()
     def load(data: pd.DataFrame):

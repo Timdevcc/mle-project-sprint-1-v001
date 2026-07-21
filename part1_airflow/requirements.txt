@@ -173,3 +173,4 @@ xattr==0.10.1
 yarl==1.9.3
 zipp==3.17.0
 python-dotenv==1.0.1
+seaborn=0.13.2
