@@ -1,0 +1,83 @@
+schema: '2.0'
+stages:
+  get_data:
+    cmd: python scripts/get_data.py
+    deps:
+    - path: scripts/get_data.py
+      hash: md5
+      md5: 7c381769774a63e18d1ef5abeaf756c2
+      size: 1018
+    params:
+      params.yaml:
+        index_col: id
+    outs:
+    - path: data/initial_data.csv
+      hash: md5
+      md5: a3908dc11a45ac638b80c23446043b62
+      size: 15788775
+      cloud:
+        my_storage:
+          etag: a3908dc11a45ac638b80c23446043b62
+          version_id: 0006570C0BCEEFF5
+  fit_model:
+    cmd: python scripts/fit.py
+    deps:
+    - path: data/initial_data.csv
+      hash: md5
+      md5: a3908dc11a45ac638b80c23446043b62
+      size: 15788775
+    - path: scripts/fit.py
+      hash: md5
+      md5: 587c5bbf006b5e1b328f78daad7f98fd
+      size: 1635
+    params:
+      params.yaml:
+        index_col: id
+        max_depth: 20
+        max_features: sqrt
+        min_samples_leaf: 2
+        n_estimators: 200
+        n_jobs: -1
+        one_hot_drop: if_binary
+        preproc_remainder: passthrough
+        random_state: 42
+        target_col: price
+    outs:
+    - path: models/fitted_model.pkl
+      hash: md5
+      md5: 0fe233f42cb54f097d3946d0351a26a4
+      size: 462991799
+      cloud:
+        my_storage:
+          etag: ae6a5a79e89f4888d9731a673f55c78a-9
+          version_id: 0006571DB193CDD9
+  evaluate_model:
+    cmd: python scripts/evaluate.py
+    deps:
+    - path: models/fitted_model.pkl
+      hash: md5
+      md5: 0fe233f42cb54f097d3946d0351a26a4
+      size: 462991799
+    - path: scripts/evaluate.py
+      hash: md5
+      md5: c983ea6469d3444d597d907adc99a2c6
+      size: 965
+    params:
+      params.yaml:
+        index_col: id
+        metrics:
+        - neg_root_mean_squared_error
+        - neg_mean_absolute_error
+        - r2
+        n_jobs: -1
+        n_splits: 5
+        target_col: price
+    outs:
+    - path: cv_results/cv_res.json
+      hash: md5
+      md5: 90841b31a8a7f60b962573b381cedc40
+      size: 157
+      cloud:
+        my_storage:
+          etag: 90841b31a8a7f60b962573b381cedc40
+          version_id: 0006571DB0EDBC2B
