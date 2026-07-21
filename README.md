@@ -18,4 +18,4 @@ part2_dvc/dvc.lock
 
 Имя бакета: s3-student-mle-20260702-1d35328110-freetrack
 
-Для корректной работы с тг ботом вставтье TOKEN и CHAT_ID в env
+Для корректной работы с тг ботом вставьте TOKEN и CHAT_ID в part1_airflow/.env
