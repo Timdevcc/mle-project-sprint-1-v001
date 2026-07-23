@@ -64,7 +64,7 @@ def clean_flats_price_dataset():
             Column("is_apartment", Boolean),
             Column("studio", Boolean),
             Column("total_area", Float),
-            Column("price", BigInteger),
+            Column("price", Float),
 
             Column("build_year", Integer),
             Column("building_type_int", Integer),
